@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    #qrcode { margin: 5px; }
+    button { padding: 10px; margin: 5px; }
+  </style>
+</head>
+<body>
+    <h2>Teacher Dashboard</h2>
+  <div id="qrcode"></div>
+  <p>Current Code: <span id="codeDisplay"></span></p>
+  <button onclick="markTeacherAttendance()">Mark My Attendance</button>
+  <div id="attendanceLog"></div>
+
+  <script>
+    let currentCode = generateRandomCode();
+    let attendanceLog = [];
+
+    function generateRandomCode() {
+      return Math.random().toString(36).substr(2, 9);
+    }
+
+    function updateQRCode() {
+      currentCode = generateRandomCode();
+      new QRCode(document.getElementById("qrcode"), {
+        text: currentCode,
+        width: 128,
+        height: 100
+      });
+      document.getElementById("codeDisplay").innerText = currentCode;
+    }
+
+    function markTeacherAttendance() {
+      attendanceLog.push("Teacher marked at " + new Date().toLocaleTimeString());
+      updateLog();
+    }
+
+    function updateLog() {
+      document.getElementById("attendanceLog").innerHTML = 
+        "<h3>Attendance Log</h3>" + attendanceLog.map(log => "<p>" + log + "</p>").join("");
+    }
+
+    setInterval(updateQRCode, 5000);
+    updateQRCode();
+  </script>
+</body>
+</html>
